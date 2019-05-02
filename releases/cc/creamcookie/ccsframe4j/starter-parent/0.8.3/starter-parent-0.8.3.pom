@@ -7,31 +7,12 @@
     <groupId>cc.creamcookie.ccsframe4j</groupId>
     <artifactId>starter-parent</artifactId>
     <version>0.8.3</version>
-    <packaging>war</packaging>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.4.RELEASE</version>
     </parent>
-
-    <repositories>
-        <repository>
-            <id>xDefine</id>
-            <url>https://mvn.creamcookie.cc/content/repositories/m2/</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>xDefine</id>
-            <url>https://mvn.creamcookie.cc/content/repositories/m2/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
 
@@ -41,78 +22,8 @@
             <version>0.8.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.javascript</groupId>
-            <artifactId>closure-compiler</artifactId>
-            <version>v20180402</version>
-            <optional>true</optional>
-        </dependency>
-
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <outputDirectory>${basedir}/war</outputDirectory>
-                    <warSourceExcludes>
-                        css*,css*/**,js/**,assets/style.css,assets/style*.css,assets/script.js,assets/script*.js
-                    </warSourceExcludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.samaxes.maven</groupId>
-                <artifactId>minify-maven-plugin</artifactId>
-                <version>1.7.9</version>
-                <executions>
-                    <execution>
-                        <id>assets-minify</id>
-                        <phase>prepare-package</phase>
-                        <configuration>
-                            <charset>UTF-8</charset>
-                            <jsEngine>CLOSURE</jsEngine>
-                            <closureLanguageIn>ECMASCRIPT_2018</closureLanguageIn>
-                            <nosuffix>true</nosuffix>
-                            <skipMerge>true</skipMerge>
-                            <jsSourceDir>assets</jsSourceDir>
-                            <jsSourceIncludes>
-                                <jsSourceInclude>apps/*.js</jsSourceInclude>
-                            </jsSourceIncludes>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>default-minify</id>
-                        <phase>prepare-package</phase>
-                        <configuration>
-                            <charset>UTF-8</charset>
-                            <nosuffix>true</nosuffix>
-                            <skipMerge>false</skipMerge>
-                            <jsEngine>CLOSURE</jsEngine>
-                            <closureLanguageIn>ECMASCRIPT_2018</closureLanguageIn>
-                            <bundleConfiguration>src/main/resources/static-bundles.json</bundleConfiguration>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 
 </project>
