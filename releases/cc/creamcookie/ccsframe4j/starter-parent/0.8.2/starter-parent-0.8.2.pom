@@ -7,6 +7,7 @@
     <groupId>cc.creamcookie.ccsframe4j</groupId>
     <artifactId>starter-parent</artifactId>
     <version>0.8.2</version>
+    <packaging>pom</packaging>
 
     <properties>
         <java.version>1.8</java.version>
