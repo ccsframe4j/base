@@ -1,0 +1,7 @@
+
+var params = {};
+{% for key in props.keySet() %}
+
+params["{{ key }}"] = "{{ props.getProperty(key).replaceAll('\n', '\\n') }}";
+
+{% endfor %}
