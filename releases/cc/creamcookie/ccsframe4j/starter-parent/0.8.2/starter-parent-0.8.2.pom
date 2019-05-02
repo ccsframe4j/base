@@ -25,6 +25,13 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>xDefine</id>
+            <url>https://mvn.creamcookie.cc/content/repositories/m2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
 
         <dependency>
