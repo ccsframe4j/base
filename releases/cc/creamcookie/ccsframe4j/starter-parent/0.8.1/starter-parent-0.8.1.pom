@@ -6,7 +6,7 @@
 
     <groupId>cc.creamcookie.ccsframe4j</groupId>
     <artifactId>starter-parent</artifactId>
-    <version>0.8.0</version>
+    <version>0.8.1</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,6 +15,12 @@
     </parent>
 
     <dependencies>
+
+        <dependency>
+            <groupId>cc.creamcookie.ccsframe4j</groupId>
+            <artifactId>base</artifactId>
+            <version>0.8.1</version>
+        </dependency>
 
     </dependencies>
 
