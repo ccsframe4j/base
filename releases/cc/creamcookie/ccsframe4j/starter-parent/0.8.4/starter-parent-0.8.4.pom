@@ -7,7 +7,7 @@
     <groupId>cc.creamcookie.ccsframe4j</groupId>
     <artifactId>starter-parent</artifactId>
     <version>0.8.4</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -30,7 +30,5 @@
         </dependency>
 
     </dependencies>
-
-
 
 </project>
