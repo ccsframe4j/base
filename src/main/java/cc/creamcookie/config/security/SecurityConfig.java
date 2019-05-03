@@ -35,6 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecurityProvider securityProvider;
     private final AuthSuccessHandler authSuccessHandler;
     private final AuthFailureHandler authFailureHandler;
+    private final CCSAuthenticationEntryPoint authenticationEntryPoint;
+    private final CCSLogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired(required = false)
     private IAppConfig config;
@@ -56,13 +58,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.formLogin()
                 .loginPage("/login")
                 .usernameParameter("signname")
                 .passwordParameter("password")
                 .successHandler(authSuccessHandler)
-                .failureHandler(authFailureHandler);
+                .failureHandler(authFailureHandler)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint);
 
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry perms = http.authorizeRequests();
         if (config != null && config.getSecurityRules().size() > 0) {
@@ -84,7 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.logout().invalidateHttpSession(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+                .logoutSuccessHandler(logoutSuccessHandler);
 
         String appName = "webapp";
         if (config != null && config.getName() != null) appName = config.getName();
