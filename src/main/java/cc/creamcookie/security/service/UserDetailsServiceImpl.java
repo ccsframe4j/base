@@ -45,7 +45,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             }
         }
 
-        SignDetails user = new SignDetails(dto.getEntity().getSignname(), dto.getEntity().getPassword(), roles);
+        SignDetails user = new SignDetails(dto.getEntity().getSignname(), dto.getEntity().getPassword(), true, true, true, !dto.entity.isActive(), roles);
         user.setObject(dto.getData());
         return user;
     }

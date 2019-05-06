@@ -35,6 +35,8 @@ public abstract class BaseAccount extends BaseEntity {
     @EqualsAndHashCode.Include
     protected List<String> roles;
 
+    protected boolean active = true;
+
     protected LocalDateTime lastSignedAt;
 
 }
