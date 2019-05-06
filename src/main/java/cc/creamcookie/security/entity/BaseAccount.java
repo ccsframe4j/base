@@ -4,6 +4,7 @@ import cc.creamcookie.config.hibernate.ListAttributeConverter;
 import cc.creamcookie.jpa.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.Where;
+import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,10 +18,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity(name = "account")
 @Table(name = "account")
+@Audited
+@AuditOverride(forClass = BaseEntity.class)
 public abstract class BaseAccount extends BaseEntity {
 
     @Column(nullable = false, unique = true)
