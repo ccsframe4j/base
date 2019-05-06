@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +44,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         response.setDateHeader("Expires", 0);
 
         request.setAttribute("nowtime", LocalDateTime.now());
+        request.setAttribute("html", new HTMLUtils(request));
 
         return true;
     }
