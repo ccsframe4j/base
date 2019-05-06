@@ -80,7 +80,7 @@ public class BaseConfiguration implements WebMvcConfigurer {
             localeResolver.setCookieName("i18n");
             localeResolver.setCookieMaxAge(-1);
             localeResolver.setCookiePath("/");
-            localeResolver.setDefaultLocale(Locale.KOREA);
+            localeResolver.setDefaultLocale(Locale.ENGLISH);
             return localeResolver;
         }
 
