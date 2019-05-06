@@ -1,9 +1,8 @@
 package cc.creamcookie.config.security;
 
 import cc.creamcookie.IAppConfig;
-import cc.creamcookie.security.service.SecurityProvider;
-import cc.creamcookie.security.service.UserDetailsServiceImpl;
 import cc.creamcookie.security.dto.Permission;
+import cc.creamcookie.security.service.UserDetailsServiceImpl;
 import com.hectorlopezfernandez.pebble.springsecurity.SpringSecurityExtension;
 import com.mitchellbosecke.pebble.extension.Extension;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final SecurityProvider securityProvider;
     private final AuthSuccessHandler authSuccessHandler;
     private final AuthFailureHandler authFailureHandler;
     private final CCSAuthenticationEntryPoint authenticationEntryPoint;
@@ -100,11 +97,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(86400);
 
         http.csrf().requireCsrfProtectionMatcher(new CsrfMatcher());
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(securityProvider);
     }
 
     @Bean

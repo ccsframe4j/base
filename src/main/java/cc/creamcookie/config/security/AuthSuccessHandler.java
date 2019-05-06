@@ -29,8 +29,10 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
+
         String accept = request.getHeader("Accept");
         if (Utils.isJsonProducesRequest(accept)) {
+
             SavedRequest savedRequest = this.requestCache.getRequest(request, response);
             if (savedRequest == null) {
                 this.clearAuthenticationAttributes(request);
@@ -43,7 +45,10 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
                     this.clearAuthenticationAttributes(request);
                 }
             }
-        } else {
+
+        }
+        else {
+
             String uri = request.getParameter("redirect_uri");
             if (uri != null && !uri.isEmpty()) {
                 getRedirectStrategy().sendRedirect(request, response, uri);

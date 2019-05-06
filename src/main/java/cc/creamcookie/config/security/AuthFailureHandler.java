@@ -3,6 +3,7 @@ package cc.creamcookie.config.security;
 import cc.creamcookie.utils.Utils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
             String qs = req.getQueryString();
             if (qs == null || !qs.contains("error=true")) qs = "error=true" + (qs == null ? "" : "&" + qs);
 
-            if (arg2.getClass() == BadCredentialsException.class) {
+            if (arg2.getClass() != UsernameNotFoundException.class) {
                 req.setAttribute("signname", req.getParameter("signname"));
             }
             req.setAttribute("SPRING_SECURITY_LAST_EXCEPTION", arg2);
