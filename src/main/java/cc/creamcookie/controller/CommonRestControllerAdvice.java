@@ -9,12 +9,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -56,8 +58,14 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
         return errorResponseEntity(status, ex);
     }
 
+    @ExceptionHandler({ AccessDeniedException.class })
+    public ResponseEntity<Object> handleAccessDeniedException(final Exception ex, final WebRequest request) {
+        log.info("request.getUserPrincipal(): {}", request.getUserPrincipal());
+        return errorResponseEntity(HttpStatus.FORBIDDEN, ex);
+    }
+
     @ExceptionHandler(Exception.class)
-    ResponseEntity<Object> handleControllerException(HttpServletRequest request, Exception ex) {
+    ResponseEntity<Object> handleException(Exception ex, HttpServletRequest request) {
         HttpStatus status = getStatus(request);
         return errorResponseEntity(status, ex);
     }
@@ -74,6 +82,7 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
 
     private HttpStatus getStatus(HttpServletRequest request) {
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        log.info("statusCode: {}", statusCode);
         if (statusCode == null) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }

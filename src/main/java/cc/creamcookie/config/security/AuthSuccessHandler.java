@@ -4,6 +4,7 @@ import cc.creamcookie.security.entity.BaseAccount;
 import cc.creamcookie.security.entity.BaseAccountRepository;
 import cc.creamcookie.security.dto.SignDetails;
 import cc.creamcookie.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Component
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
@@ -29,10 +31,10 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
-
         String accept = request.getHeader("Accept");
+        log.info("Accept: {}", accept);
         if (Utils.isJsonProducesRequest(accept)) {
-
+            log.info("isJsonProducesRequest");
             SavedRequest savedRequest = this.requestCache.getRequest(request, response);
             if (savedRequest == null) {
                 this.clearAuthenticationAttributes(request);
@@ -45,9 +47,7 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
                     this.clearAuthenticationAttributes(request);
                 }
             }
-
-        }
-        else {
+        } else {
 
             String uri = request.getParameter("redirect_uri");
             if (uri != null && !uri.isEmpty()) {
