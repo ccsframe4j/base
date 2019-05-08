@@ -58,7 +58,7 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
         return errorResponseEntity(status, ex);
     }
 
-    @ExceptionHandler({ AccessDeniedException.class })
+    @ExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<Object> handleAccessDeniedException(final Exception ex, final WebRequest request) {
         log.info("request.getUserPrincipal(): {}", request.getUserPrincipal());
         return errorResponseEntity(HttpStatus.FORBIDDEN, ex);
