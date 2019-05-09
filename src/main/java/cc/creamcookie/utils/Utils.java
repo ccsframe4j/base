@@ -1,5 +1,6 @@
 package cc.creamcookie.utils;
 
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -13,7 +14,10 @@ public class Utils {
     public static boolean isJsonProducesRequest(String accept) {
         List<MediaType> mediaTypes = MediaType.parseMediaTypes(accept);
         MediaType mediaType = mediaTypes.stream().findFirst().orElse(MediaType.ALL);
-        if (!MediaType.ALL.getType().equals(mediaType.getType()) && mediaType.isCompatibleWith(MediaType.APPLICATION_JSON_UTF8)) {
+
+        if (!MediaType.ALL.getType().equals(mediaType.getType())
+                && (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON_UTF8) || mediaType.isCompatibleWith(MediaTypes.HAL_JSON_UTF8))
+        ) {
             return true;
         }
         return false;

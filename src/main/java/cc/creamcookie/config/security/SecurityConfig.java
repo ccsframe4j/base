@@ -6,6 +6,7 @@ import cc.creamcookie.security.service.UserDetailsServiceImpl;
 import com.hectorlopezfernandez.pebble.springsecurity.SpringSecurityExtension;
 import com.mitchellbosecke.pebble.extension.Extension;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -65,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 
+        log.debug("config: {}", config);
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry perms = http.authorizeRequests();
         if (config != null && config.getSecurityRules().size() > 0) {
             for (Permission permission : config.getSecurityRules()) {
@@ -77,6 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         break;
                     case HAS_ROLE:
                         perms.antMatchers(permission.getUrl()).hasAnyRole(permission.getRoles());
+                        break;
+                    case HAS_ROLE_WITH_HTTP_METHOD:
+                        perms.antMatchers(permission.getHttpMethod(), permission.getUrl()).hasAnyRole(permission.getRoles());
                         break;
                 }
             }

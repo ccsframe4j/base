@@ -26,7 +26,9 @@ public class CCSAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoin
 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String accept = request.getHeader("Accept");
+        log.info("Accept: {}", accept);
         if (Utils.isJsonProducesRequest(accept)) {
+            log.info("isJsonProducesRequest");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
         } else {
             super.commence(request, response, authException);
