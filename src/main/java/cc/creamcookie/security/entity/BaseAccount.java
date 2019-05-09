@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -40,6 +41,7 @@ public abstract class BaseAccount extends BaseEntity {
 
     protected boolean active = true;
 
+    @NotAudited
     protected LocalDateTime lastSignedAt;
 
 }
