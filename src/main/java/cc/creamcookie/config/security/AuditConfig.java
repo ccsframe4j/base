@@ -24,7 +24,6 @@ public class AuditConfig {
 
     @Bean
     public AuditorAware<BaseAccount> createAuditorProvider() {
-        System.out.println("createAuditorProvider - BaseAccount");
         return new SecurityAuditor(repository);
     }
 
@@ -37,18 +36,18 @@ public class AuditConfig {
         private BaseAccountRepository repository;
 
         public SecurityAuditor(BaseAccountRepository repository) {
-            System.out.println("createAuditorProvider - BaseAccount111");
             this.repository = repository;
         }
 
         @Override
         public Optional<BaseAccount> getCurrentAuditor() {
-            System.out.println("createAuditorProvider - BaseAccount2222");
             try {
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                SignDetails details = (SignDetails) auth.getPrincipal();
-                if (details != null && details.getObject() != null) {
-                    return repository.findById(details.getObject().getLong("id"));
+                if (auth.getPrincipal() instanceof SignDetails) {
+                    SignDetails details = (SignDetails) auth.getPrincipal();
+                    if (details != null && details.getObject() != null) {
+                        return repository.findById(details.getObject().getLong("id"));
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

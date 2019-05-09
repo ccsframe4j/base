@@ -5,6 +5,8 @@ import org.hibernate.validator.internal.engine.groups.Group;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -72,6 +74,11 @@ public class Restrictions {
         return this;
     }
 
+    public Restrictions near(Double lat, Double lng) {
+        conditions.add(new Condition(ConditionType.ORDER_NEAR, "distance", lat, lng));
+        return this;
+    }
+
     @SuppressWarnings("rawtypes")
     public void in(String name, Collection value) {
         conditions.add(new Condition(ConditionType.IN, name, value));
@@ -105,6 +112,7 @@ public class Restrictions {
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
                 List<Predicate> items = new ArrayList<Predicate>();
+                List<Order> orders = new ArrayList<Order>();
                 for (Condition condition : conditions) {
 
                     String key = condition.getName();
@@ -188,17 +196,29 @@ public class Restrictions {
                             if (object instanceof Date) {
                                 items.add(cb.between(Restrictions.<Date>getPath(root, key), (Date) object, (Date) object2));
                             }
+                            else if (LocalDateTime.class.isAssignableFrom(object.getClass())) {
+                                items.add(cb.between(Restrictions.getPath(root, key), (LocalDateTime) object, (LocalDateTime) object2));
+                            }
+                            else if (LocalDate.class.isAssignableFrom(object.getClass())) {
+                                items.add(cb.between(Restrictions.getPath(root, key), (LocalDate) object, (LocalDate) object2));
+                            }
                             else {
                                 items.add(cb.between(Restrictions.getPath(root, key), (Double) object, (Double) object2));
                             }
+                            break;
+                        }
+                        case ORDER_NEAR: {
+                            query.orderBy(cb.desc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
                             break;
                         }
 
                         default:
                             break;
                     }
-
                 }
+
+
+//
 
                 if (items.size() > 1) {
                     Predicate[] ps = items.toArray(new Predicate[] {});
@@ -277,10 +297,13 @@ public class Restrictions {
         LESS_THAN_OR_IS_NULL,
         GREATER_THAN_OR_IS_NULL,
         EQUAL_PROPERTY,
+        ORDER_NEAR,
     }
 
     public enum Conn {
         AND,
         OR
     }
+
+
 }
