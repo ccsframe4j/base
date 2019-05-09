@@ -41,7 +41,4 @@ public abstract class BaseAccount extends BaseEntity {
 
     protected boolean active = true;
 
-    @NotAudited
-    protected LocalDateTime lastSignedAt;
-
 }

@@ -54,18 +54,18 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
                 getRedirectStrategy().sendRedirect(request, response, uri);
                 return;
             }
-
-            SignDetails details = (SignDetails) authentication.getPrincipal();
-            if (details != null) {
-                BaseAccount account = accountRepository.findById(details.getLong("id")).orElse(null);
-                if (account != null) {
-                    //	if (account.getState() != State.READY && account.getActivateKey() != null) {
-                    //	    account.setActivateKey(null);
-                    //	}
-                    account.setLastSignedAt(LocalDateTime.now());
-                    account = accountRepository.save(account);
-                }
-            }
+//
+//            SignDetails details = (SignDetails) authentication.getPrincipal();
+//            if (details != null) {
+//                BaseAccount account = accountRepository.findById(details.getLong("id")).orElse(null);
+//                if (account != null) {
+//                    //	if (account.getState() != State.READY && account.getActivateKey() != null) {
+//                    //	    account.setActivateKey(null);
+//                    //	}
+//                    account.setLastSignedAt(LocalDateTime.now());
+//                    account = accountRepository.save(account);
+//                }
+//            }
             super.onAuthenticationSuccess(request, response, authentication);
         }
     }
