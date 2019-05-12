@@ -25,6 +25,7 @@ import java.util.List;
 @Table(name = "account")
 @Audited
 @AuditOverride(forClass = BaseEntity.class)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class BaseAccount extends BaseEntity {
 
     @Column(nullable = false, unique = true)
