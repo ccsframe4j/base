@@ -2,6 +2,7 @@ package cc.creamcookie.config.security;
 
 import cc.creamcookie.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,13 @@ public class CCSLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
         log.info("Accept: {}", accept);
         if (Utils.isJsonProducesRequest(accept)) {
             log.info("isJsonProducesRequest");
+
+            String accessToken = request.getHeader("AccessToken");
+            log.info("accessToken: {}", accessToken);
+            if (StringUtils.isNotEmpty(accessToken)) {
+                response.setHeader("AccessToken", null);
+            }
+
             String targetUrl = determineTargetUrl(request, response);
             if (response.isCommitted()) {
                 logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);

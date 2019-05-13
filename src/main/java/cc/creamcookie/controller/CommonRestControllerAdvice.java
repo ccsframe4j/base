@@ -64,6 +64,12 @@ public class CommonRestControllerAdvice extends ResponseEntityExceptionHandler {
         return errorResponseEntity(HttpStatus.FORBIDDEN, ex);
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    ResponseEntity<Object> handleIllegalArgumentExceptionException(Exception ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return errorResponseEntity(status, ex);
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity<Object> handleException(Exception ex, HttpServletRequest request) {
         HttpStatus status = getStatus(request);
