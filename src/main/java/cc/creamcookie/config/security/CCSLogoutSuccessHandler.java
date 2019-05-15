@@ -27,11 +27,7 @@ public class CCSLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
         if (Utils.isJsonProducesRequest(accept)) {
             log.info("isJsonProducesRequest");
 
-            String accessToken = request.getHeader("AccessToken");
-            log.info("accessToken: {}", accessToken);
-            if (StringUtils.isNotEmpty(accessToken)) {
-                response.setHeader("AccessToken", null);
-            }
+
 
             String targetUrl = determineTargetUrl(request, response);
             if (response.isCommitted()) {
