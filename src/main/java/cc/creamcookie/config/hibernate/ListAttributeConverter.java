@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2019-02-27
  */
 @Slf4j
-@Converter
+@Converter(autoApply = true)
 public class ListAttributeConverter implements AttributeConverter<List<Object>, String> {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
