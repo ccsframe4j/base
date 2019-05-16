@@ -46,14 +46,19 @@ public class BaseConfiguration implements WebMvcConfigurer {
 
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
-        String[] baseNames = new String[properties.getLanguages().size()];
-        for (int i = 0; i < properties.getLanguages().size(); i++) {
-            baseNames[i] = "classpath:/" + properties.getLanguages().get(i);
+        if (properties.getLanguages() != null) {
+            String[] baseNames = new String[properties.getLanguages().size()];
+            for (int i = 0; i < properties.getLanguages().size(); i++) {
+                baseNames[i] = "classpath:/" + properties.getLanguages().get(i);
+            }
+            ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+            messageSource.setDefaultEncoding("UTF-8");
+            messageSource.setBasenames(baseNames);
+            return messageSource;
         }
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setBasenames(baseNames);
-        return messageSource;
+        else {
+            return null;
+        }
     }
 
     @Bean
