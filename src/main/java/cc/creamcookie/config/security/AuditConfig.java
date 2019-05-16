@@ -50,7 +50,7 @@ public class AuditConfig {
                     }
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
             return Optional.empty();
         }
