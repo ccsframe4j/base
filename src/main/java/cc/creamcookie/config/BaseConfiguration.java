@@ -57,7 +57,7 @@ public class BaseConfiguration implements WebMvcConfigurer {
             return messageSource;
         }
         else {
-            return null;
+            return new ReloadableResourceBundleMessageSource();
         }
     }
 
