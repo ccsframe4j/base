@@ -57,11 +57,18 @@ public class Permission {
         this.roles = (String[]) roles.toArray();
     }
 
+    public Permission(HttpMethod httpMethod, String url) {
+        this.httpMethod = httpMethod;
+        this.url = url;
+        this.method = Method.PERMIT_ALL_WITH_HTTP_METHOD;
+    }
+
     public static enum Method {
         PERMIT_ALL,
         REQUIRE_LOGIN,
         HAS_ROLE,
-        HAS_ROLE_WITH_HTTP_METHOD
+        HAS_ROLE_WITH_HTTP_METHOD,
+        PERMIT_ALL_WITH_HTTP_METHOD
     }
 
 }

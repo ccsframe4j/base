@@ -88,6 +88,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     case HAS_ROLE_WITH_HTTP_METHOD:
                         perms.antMatchers(permission.getHttpMethod(), permission.getUrl()).hasAnyRole(permission.getRoles());
                         break;
+                    case PERMIT_ALL_WITH_HTTP_METHOD:
+                        perms.antMatchers(permission.getHttpMethod(), permission.getUrl()).permitAll();
+                        break;
                 }
             }
         }
