@@ -208,7 +208,7 @@ public class Restrictions {
                             break;
                         }
                         case ORDER_NEAR: {
-                            query.orderBy(cb.desc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
+                            query.orderBy(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
                             break;
                         }
 

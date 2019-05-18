@@ -2,6 +2,7 @@ package cc.creamcookie.security.entity;
 
 import cc.creamcookie.config.hibernate.ListAttributeConverter;
 import cc.creamcookie.jpa.BaseEntity;
+import com.google.common.collect.Lists;
 import lombok.*;
 import org.hibernate.annotations.Where;
 import org.hibernate.envers.AuditOverride;
@@ -38,7 +39,7 @@ public abstract class BaseAccount extends BaseEntity {
     @Lob
     @Convert(converter = ListAttributeConverter.class)
     @EqualsAndHashCode.Include
-    protected List<String> roles;
+    protected List<String> roles = Lists.newArrayList();
 
     protected boolean active = true;
 
