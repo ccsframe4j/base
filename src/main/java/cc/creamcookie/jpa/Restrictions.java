@@ -7,10 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Restrictions {
 
@@ -85,6 +82,11 @@ public class Restrictions {
     }
 
     @SuppressWarnings("rawtypes")
+    public void strIn(String name, Collection value) {
+        conditions.add(new Condition(ConditionType.STR_IN, name, value));
+    }
+
+    @SuppressWarnings("rawtypes")
     public void notIn(String name, Collection value) {
         conditions.add(new Condition(ConditionType.NOT_IN, name, value));
     }
@@ -98,7 +100,6 @@ public class Restrictions {
     }
 
 
-
     public void eqProperty(String key, String key2) {
         conditions.add(new Condition(ConditionType.EQUAL_PROPERTY, key, key2));
     }
@@ -107,7 +108,7 @@ public class Restrictions {
     public <T> Specification<T> output() {
 
         Specification<T> spec = new Specification<T>() {
-            @SuppressWarnings({ "rawtypes", "unchecked" })
+            @SuppressWarnings({"rawtypes", "unchecked"})
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
@@ -119,7 +120,7 @@ public class Restrictions {
                     Object object = condition.getValue1();
                     Object object2 = condition.getValue2();
 
-                    switch(condition.type) {
+                    switch (condition.type) {
                         case EQUALS: {
                             items.add(cb.equal(getPath(root, key), object));
                             break;
@@ -144,6 +145,20 @@ public class Restrictions {
                             items.add(cb.isNotNull(getPath(root, key)));
                             break;
                         }
+                        case STR_IN: {
+                            Predicate p = null;
+                            Path<String> field = getPath(root, key);
+
+                            Iterator itr = ((Collection) object).iterator();
+                            while (itr.hasNext()) {
+                                Object o = itr.next();
+                                Predicate _p = cb.like(field.as(String.class), "%" + o + "%");
+                                p = (p == null) ? _p : cb.or(p, _p);
+                            }
+
+                            items.add(p);
+                            break;
+                        }
                         case IN: {
                             final Path<Group> group = getPath(root, key);
                             items.add(group.in(object));
@@ -157,8 +172,7 @@ public class Restrictions {
                         case LESS_THAN_OR_EQUAL_TO: {
                             if (object instanceof Date) {
                                 items.add(cb.lessThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
-                            }
-                            else {
+                            } else {
                                 items.add(cb.le(Restrictions.<Number>getPath(root, key), (Number) object));
                             }
                             break;
@@ -166,8 +180,7 @@ public class Restrictions {
                         case GREATER_THAN_OR_EQUAL_TO: {
                             if (object instanceof Date) {
                                 items.add(cb.greaterThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
-                            }
-                            else {
+                            } else {
                                 items.add(cb.ge(Restrictions.<Number>getPath(root, key), (Number) object));
                             }
                             break;
@@ -176,8 +189,7 @@ public class Restrictions {
                             Path path = getPath(root, key);
                             if (object instanceof Date) {
                                 items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (Date) object)));
-                            }
-                            else {
+                            } else {
                                 items.add(cb.or(cb.isNull(path), cb.le(path, (Number) object)));
                             }
                             break;
@@ -186,8 +198,7 @@ public class Restrictions {
                             Path path = getPath(root, key);
                             if (object instanceof Date) {
                                 items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (Date) object)));
-                            }
-                            else {
+                            } else {
                                 items.add(cb.or(cb.isNull(path), cb.ge(path, (Number) object)));
                             }
                             break;
@@ -195,20 +206,17 @@ public class Restrictions {
                         case BETWEEN: {
                             if (object instanceof Date) {
                                 items.add(cb.between(Restrictions.<Date>getPath(root, key), (Date) object, (Date) object2));
-                            }
-                            else if (LocalDateTime.class.isAssignableFrom(object.getClass())) {
+                            } else if (LocalDateTime.class.isAssignableFrom(object.getClass())) {
                                 items.add(cb.between(Restrictions.getPath(root, key), (LocalDateTime) object, (LocalDateTime) object2));
-                            }
-                            else if (LocalDate.class.isAssignableFrom(object.getClass())) {
+                            } else if (LocalDate.class.isAssignableFrom(object.getClass())) {
                                 items.add(cb.between(Restrictions.getPath(root, key), (LocalDate) object, (LocalDate) object2));
-                            }
-                            else {
+                            } else {
                                 items.add(cb.between(Restrictions.getPath(root, key), (Double) object, (Double) object2));
                             }
                             break;
                         }
                         case ORDER_NEAR: {
-                            query.orderBy(cb.desc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
+                            query.orderBy(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
                             break;
                         }
 
@@ -217,14 +225,10 @@ public class Restrictions {
                     }
                 }
 
-
-//
-
                 if (items.size() > 1) {
-                    Predicate[] ps = items.toArray(new Predicate[] {});
+                    Predicate[] ps = items.toArray(new Predicate[]{});
                     return (currCon == Conn.AND) ? cb.and(ps) : cb.or(ps);
-                }
-                else if (items.size() == 1) {
+                } else if (items.size() == 1) {
                     return items.get(0);
                 }
 
@@ -243,7 +247,7 @@ public class Restrictions {
     }
 
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static <Y> Path<Y> getPath(Root root, String key) {
         Path<Y> x = null;
         if (key.contains(".")) {
@@ -298,6 +302,7 @@ public class Restrictions {
         GREATER_THAN_OR_IS_NULL,
         EQUAL_PROPERTY,
         ORDER_NEAR,
+        STR_IN,
     }
 
     public enum Conn {
