@@ -76,6 +76,11 @@ public class Restrictions {
         return this;
     }
 
+    public Restrictions inNear(Double lat, Double lng, Double distance) {
+        conditions.add(new Condition(ConditionType.IN_NEAR, distance, lat, lng));
+        return this;
+    }
+
     @SuppressWarnings("rawtypes")
     public void in(String name, Collection value) {
         conditions.add(new Condition(ConditionType.IN, name, value));
@@ -116,7 +121,7 @@ public class Restrictions {
                 List<Order> orders = new ArrayList<Order>();
                 for (Condition condition : conditions) {
 
-                    String key = condition.getName();
+                    String key = condition.getName().toString();
                     Object object = condition.getValue1();
                     Object object2 = condition.getValue2();
 
@@ -220,6 +225,12 @@ public class Restrictions {
                             break;
                         }
 
+                        case IN_NEAR: {
+                            Expression fn = cb.function("distance", Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2));
+                            items.add(cb.le(fn, (Double) condition.getName()));
+                            break;
+                        }
+
                         default:
                             break;
                     }
@@ -264,21 +275,21 @@ public class Restrictions {
     private class Condition {
 
         private ConditionType type;
-        private String name;
+        private Object name;
         private Object value1;
         private Object value2;
 
-        public Condition(ConditionType type, String name) {
+        public Condition(ConditionType type, Object name) {
             this(type, name, null);
         }
 
-        public Condition(ConditionType type, String name, Object value1) {
+        public Condition(ConditionType type, Object name, Object value1) {
             this.type = type;
             this.name = name;
             this.value1 = value1;
         }
 
-        public Condition(ConditionType type, String name, Object value1, Object value2) {
+        public Condition(ConditionType type, Object name, Object value1, Object value2) {
             this.type = type;
             this.name = name;
             this.value1 = value1;
@@ -302,6 +313,7 @@ public class Restrictions {
         GREATER_THAN_OR_IS_NULL,
         EQUAL_PROPERTY,
         ORDER_NEAR,
+        IN_NEAR,
         STR_IN,
     }
 
