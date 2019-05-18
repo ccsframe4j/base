@@ -146,18 +146,14 @@ public class Restrictions {
                             break;
                         }
                         case STR_IN: {
-                            final Path<String> field = getPath(root, key);
-
                             Predicate p = null;
+                            Path<String> field = getPath(root, key);
+
                             Iterator itr = ((Collection) object).iterator();
                             while (itr.hasNext()) {
                                 Object o = itr.next();
-                                if (p == null) {
-                                    p = cb.like(field.as(String.class), "%" + o + "%");
-                                }
-                                else {
-                                    p = cb.or(p, cb.like(field.as(String.class), "%" + o + "%"));
-                                }
+                                Predicate _p = cb.like(field.as(String.class), "%" + o + "%");
+                                p = (p == null) ? _p : cb.or(p, _p);
                             }
 
                             items.add(p);
@@ -228,9 +224,6 @@ public class Restrictions {
                             break;
                     }
                 }
-
-
-//
 
                 if (items.size() > 1) {
                     Predicate[] ps = items.toArray(new Predicate[]{});
