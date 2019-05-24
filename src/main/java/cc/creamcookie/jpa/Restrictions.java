@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public class Restrictions {
@@ -177,7 +178,17 @@ public class Restrictions {
                         case LESS_THAN_OR_EQUAL_TO: {
                             if (object instanceof Date) {
                                 items.add(cb.lessThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
-                            } else {
+                            }
+                            else if (object instanceof LocalDateTime) {
+                                items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key), (LocalDateTime) object));
+                            }
+                            else if (object instanceof LocalDate) {
+                                items.add(cb.lessThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key), (LocalDate) object));
+                            }
+                            else if (object instanceof LocalTime) {
+                                items.add(cb.lessThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key), (LocalTime) object));
+                            }
+                            else {
                                 items.add(cb.le(Restrictions.<Number>getPath(root, key), (Number) object));
                             }
                             break;
@@ -185,7 +196,17 @@ public class Restrictions {
                         case GREATER_THAN_OR_EQUAL_TO: {
                             if (object instanceof Date) {
                                 items.add(cb.greaterThanOrEqualTo(Restrictions.<Date>getPath(root, key), (Date) object));
-                            } else {
+                            }
+                            else if (object instanceof LocalDateTime) {
+                                items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDateTime>getPath(root, key), (LocalDateTime) object));
+                            }
+                            else if (object instanceof LocalDate) {
+                                items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalDate>getPath(root, key), (LocalDate) object));
+                            }
+                            else if (object instanceof LocalTime) {
+                                items.add(cb.greaterThanOrEqualTo(Restrictions.<LocalTime>getPath(root, key), (LocalTime) object));
+                            }
+                            else {
                                 items.add(cb.ge(Restrictions.<Number>getPath(root, key), (Number) object));
                             }
                             break;
@@ -194,7 +215,17 @@ public class Restrictions {
                             Path path = getPath(root, key);
                             if (object instanceof Date) {
                                 items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (Date) object)));
-                            } else {
+                            }
+                            else if (object instanceof LocalDateTime) {
+                                items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalDateTime) object)));
+                            }
+                            else if (object instanceof LocalDate) {
+                                items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalDate) object)));
+                            }
+                            else if (object instanceof LocalTime) {
+                                items.add(cb.or(cb.isNull(path), cb.lessThanOrEqualTo(path, (LocalTime) object)));
+                            }
+                            else {
                                 items.add(cb.or(cb.isNull(path), cb.le(path, (Number) object)));
                             }
                             break;
@@ -203,7 +234,17 @@ public class Restrictions {
                             Path path = getPath(root, key);
                             if (object instanceof Date) {
                                 items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (Date) object)));
-                            } else {
+                            }
+                            else if (object instanceof LocalDateTime) {
+                                items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalDateTime) object)));
+                            }
+                            else if (object instanceof LocalDate) {
+                                items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalDate) object)));
+                            }
+                            else if (object instanceof LocalTime) {
+                                items.add(cb.or(cb.isNull(path), cb.greaterThanOrEqualTo(path, (LocalTime) object)));
+                            }
+                            else {
                                 items.add(cb.or(cb.isNull(path), cb.ge(path, (Number) object)));
                             }
                             break;
@@ -215,6 +256,8 @@ public class Restrictions {
                                 items.add(cb.between(Restrictions.getPath(root, key), (LocalDateTime) object, (LocalDateTime) object2));
                             } else if (LocalDate.class.isAssignableFrom(object.getClass())) {
                                 items.add(cb.between(Restrictions.getPath(root, key), (LocalDate) object, (LocalDate) object2));
+                            } else if (LocalTime.class.isAssignableFrom(object.getClass())) {
+                                items.add(cb.between(Restrictions.getPath(root, key), (LocalTime) object, (LocalTime) object2));
                             } else {
                                 items.add(cb.between(Restrictions.getPath(root, key), (Double) object, (Double) object2));
                             }

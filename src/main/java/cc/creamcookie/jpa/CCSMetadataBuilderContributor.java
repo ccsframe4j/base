@@ -10,8 +10,16 @@ public class CCSMetadataBuilderContributor implements MetadataBuilderContributor
     @Override
     public void contribute(MetadataBuilder metadataBuilder) {
 
+        String distanceQuery = "111.111" +
+                " * DEGREES(ACOS(LEAST(COS(RADIANS(?1)) " +
+                " * COS(RADIANS(?3))\n" +
+                " * COS(RADIANS(?2 - ?4))\n" +
+                " + SIN(RADIANS(?1))\n" +
+                " * SIN(RADIANS(?3)), 1.0)))";
+
+
         metadataBuilder.applySqlFunction("distance",
-                new SQLFunctionTemplate(DateType.INSTANCE, "ACOS(SIN(?1) * SIN(?3) + COS(?1) * COS(?3) * COS(?4 - ?2))"));
+                new SQLFunctionTemplate(DateType.INSTANCE, distanceQuery));
 
     }
 
