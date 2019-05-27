@@ -7,12 +7,14 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -87,9 +89,7 @@ public class BaseConfiguration implements WebMvcConfigurer {
             localeResolver.setCookiePath("/");
             return localeResolver;
         }
-
     }
-
 
     @Bean
     @ConditionalOnMissingBean(name = "modelMapper")
@@ -102,8 +102,5 @@ public class BaseConfiguration implements WebMvcConfigurer {
                 .setFieldMatchingEnabled(true);
         return modelMapper;
     }
-
-
-
 
 }
