@@ -31,7 +31,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
         String uri = request.getRequestURI();
         uri = uri.substring(request.getContextPath().length());
-        if (uri.startsWith("/files/")) return true;
+        if (uri.startsWith("/files")) return true;
 
         response.setHeader("X-Location", uri);
 

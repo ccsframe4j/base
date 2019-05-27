@@ -139,6 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public boolean matches(HttpServletRequest request) {
             if (!request.getMethod().equals("POST") ||
+                    request.getRequestURL().indexOf("/files") >= 0 ||
                     request.getRequestURL().indexOf("/lambda") >= 0 ||
                     request.getRequestURL().indexOf("/api") >= 0)
                 return false;
