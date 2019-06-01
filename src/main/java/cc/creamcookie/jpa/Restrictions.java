@@ -2,6 +2,7 @@ package cc.creamcookie.jpa;
 
 import lombok.Data;
 import org.hibernate.validator.internal.engine.groups.Group;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -76,6 +77,12 @@ public class Restrictions {
         conditions.add(new Condition(ConditionType.ORDER_NEAR, "distance", lat, lng));
         return this;
     }
+
+    public Restrictions addOrder(String name, Sort.Direction sort) {
+        conditions.add(new Condition(ConditionType.ORDER, name, sort));
+        return this;
+    }
+
 
     public Restrictions inNear(Double lat, Double lng, Double distance) {
         conditions.add(new Condition(ConditionType.IN_NEAR, distance, lat, lng));
@@ -263,6 +270,17 @@ public class Restrictions {
                             }
                             break;
                         }
+
+                        case ORDER: {
+                            if (object == Sort.Direction.DESC) {
+                                query.orderBy(cb.desc(getPath(root, key)));
+                            }
+                            else {
+                                query.orderBy(cb.asc(getPath(root, key)));
+                            }
+                            break;
+                        }
+
                         case ORDER_NEAR: {
                             query.orderBy(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
                             break;
@@ -355,6 +373,7 @@ public class Restrictions {
         LESS_THAN_OR_IS_NULL,
         GREATER_THAN_OR_IS_NULL,
         EQUAL_PROPERTY,
+        ORDER,
         ORDER_NEAR,
         IN_NEAR,
         STR_IN,
