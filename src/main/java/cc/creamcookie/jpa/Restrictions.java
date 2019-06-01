@@ -273,16 +273,16 @@ public class Restrictions {
 
                         case ORDER: {
                             if (object == Sort.Direction.DESC) {
-                                query.orderBy(cb.desc(getPath(root, key)));
+                                orders.add(cb.desc(getPath(root, key)));
                             }
                             else {
-                                query.orderBy(cb.asc(getPath(root, key)));
+                                orders.add(cb.asc(getPath(root, key)));
                             }
                             break;
                         }
 
                         case ORDER_NEAR: {
-                            query.orderBy(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
+                            orders.add(cb.asc(cb.function(key, Double.class, root.get("lat"), root.get("lng"), cb.literal((Double) object), cb.literal((Double) object2))));
                             break;
                         }
 
@@ -297,6 +297,10 @@ public class Restrictions {
                     }
                 }
 
+                if (orders.size() > 0) {
+                    query.orderBy(orders);
+                }
+
                 if (items.size() > 1) {
                     Predicate[] ps = items.toArray(new Predicate[]{});
                     return (currCon == Conn.AND) ? cb.and(ps) : cb.or(ps);
@@ -304,8 +308,11 @@ public class Restrictions {
                     return items.get(0);
                 }
 
+
                 return null;
             }
+
+
         };
 
         if (children.size() > 0) {
@@ -313,6 +320,7 @@ public class Restrictions {
                 spec = (currCon == Conn.AND) ? spec.and(child.output()) : spec.or(child.output());
             }
         }
+
 
         return spec;
 
