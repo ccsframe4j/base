@@ -110,6 +110,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(86400);
 
         http.csrf().requireCsrfProtectionMatcher(new CsrfMatcher());
+        if (config.getSecurityConfigurer() != null) {
+            http.apply(config.getSecurityConfigurer());
+        }
     }
 
     @Bean
