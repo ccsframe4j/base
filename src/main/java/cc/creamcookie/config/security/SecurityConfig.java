@@ -144,7 +144,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             if (!request.getMethod().equals("POST") ||
                     request.getRequestURL().indexOf("/files") >= 0 ||
                     request.getRequestURL().indexOf("/lambda") >= 0 ||
-                    request.getRequestURL().indexOf("/api") >= 0)
+                    request.getRequestURL().indexOf("/api") >= 0 ||
+                    request.getRequestURL().indexOf("/dataTables.json") >= 0)
                 return false;
             return true;
         }
